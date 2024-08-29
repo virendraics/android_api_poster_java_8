@@ -5,8 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,7 +58,8 @@ public class JsonReflection<T>
      * @throws JsonSyntaxException
      */
     public List<?> jsonArrayToList(String jsonData, Class tClass) throws JsonSyntaxException {
-        return gson.fromJson(jsonData, new TypeOfList<T>(tClass));
+        Type type = TypeToken.getParameterized(List.class, tClass).getType();
+        return gson.fromJson(jsonData, type);
     }
 
     /**
