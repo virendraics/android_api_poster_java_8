@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * This class is designed to be subclassed by specific REST clients, which can be used to make API requests and handle responses.
@@ -90,9 +89,7 @@ public abstract class AbstractRestClient<REQUEST, RESPONSE, DELEGATE extends Abs
 		if(queryParam != null)
 		{
 			url += url.endsWith("?") ? "" : "?";
-			url += queryParam.entrySet().stream()
-					.map(entry -> entry.getKey() + "=" + (ObjectUtil.isNotEmpty(entry.getValue()) ? entry.getValue() : ""))
-					.collect(Collectors.joining("&"));
+			url += ObjectUtil.mapToParamString((HashMap<String, String>) queryParam);
 		}
 
 		DebugLogger.print("Final URL >>>>> "+ url);
@@ -170,19 +167,16 @@ public abstract class AbstractRestClient<REQUEST, RESPONSE, DELEGATE extends Abs
 	 * Printing the debug logs
 	 */
 	private void debugPrint() {
-		final String requestData;
+		String requestData = "";
 		switch (serviceDelegate.getContentType())
 		{
 			case APPLICATION_JSON:
 				requestData = new Gson().toJson(input);
 				break;
 			case APPLICATION_FORM_URLENCODED:
-				requestData = input != null ? ((HashMap<String, String>) input).entrySet().stream()
-						.map(entry -> entry.getKey() + "=" + entry.getValue())
-						.collect(Collectors.joining("&")) : "";
+				if (input != null)
+					requestData = ObjectUtil.mapToParamString((HashMap<String, String>) input);
 				break;
-			default:
-				requestData = "";
 		};
 		DebugLogger.print("############# API REQUEST ["+ serviceDelegate.getApiEndpoint() +"] ################ \n"+requestData);
 	}

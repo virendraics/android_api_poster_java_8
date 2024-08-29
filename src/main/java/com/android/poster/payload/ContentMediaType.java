@@ -39,10 +39,16 @@ public class ContentMediaType
 	 */
 	public static <T> AbstractPayload<T> getContent(ContentType contentType, T data)
 	{
-		final ContentMediaType contentMediaType = Stream.of(APPLICATION_FORM_URLENCODED, APPLICATION_JSON)
-				.filter(ct-> contentType == ct.contentType)
-				.findFirst()
-				.orElse(null);
+		ContentMediaType contentMediaType = null;
+		ContentMediaType[] contentMediaTypes = {APPLICATION_FORM_URLENCODED, APPLICATION_JSON};
+
+		for (ContentMediaType ct : contentMediaTypes) {
+			if (contentType.equals(ct.contentType)) {
+				contentMediaType = ct;
+				break; // Stop as soon as we find the first matching element
+			}
+		}
+
 		try
 		{
 			final AbstractPayload<T> content = (AbstractPayload<T>)(Class.forName(contentMediaType.fqcn)).getDeclaredConstructor().newInstance();

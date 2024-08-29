@@ -1,6 +1,7 @@
 package com.android.poster.detail;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
@@ -9,7 +10,8 @@ import java.util.Map;
  * @author Virendra
  * @since 19-Aug-2024
  */
-@Data
+@Getter
+@Setter
 public class MessageDetail extends Detail
 {
     // private String detail; // This introduced in SPRING framework

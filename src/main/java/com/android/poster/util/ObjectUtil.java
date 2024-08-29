@@ -2,6 +2,9 @@ package com.android.poster.util;
 
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This is a utility class
  * @author Virendra
@@ -39,5 +42,25 @@ public class ObjectUtil
     public static boolean isNotEmpty(String value)
     {
         return !isEmpty(value);
+    }
+
+    /**
+     * This method return the map to param post data
+     * @param map
+     * @return
+     */
+    public static String mapToParamString(HashMap<String, String> map)
+    {
+        if (map != null)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                if (sb.length() > 0)
+                    sb.append("&");
+                sb.append(entry.getKey()).append("=").append(entry.getValue());
+            }
+           return sb.toString();
+        }
+        return "";
     }
 }

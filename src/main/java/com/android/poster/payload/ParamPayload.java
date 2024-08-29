@@ -1,10 +1,11 @@
 package com.android.poster.payload;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import com.android.poster.util.ObjectUtil;
 
 import java.util.HashMap;
-import java.util.stream.Collectors;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Implementation of the payload for parameter content.
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  * @since 19-Aug-2024
 
  */
-public class ParamPayload<T extends HashMap<String, Object>> extends AbstractPayload<T>
+public class ParamPayload<T extends HashMap<String, String>> extends AbstractPayload<T>
 {
 	/**
 	 * This method converts the payload's data (parameters) to a URL-encoded string format.
@@ -27,9 +28,6 @@ public class ParamPayload<T extends HashMap<String, Object>> extends AbstractPay
 	public RequestBody getContent()
 	{
 		final MediaType PARAM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
-		return RequestBody.create(data != null ? data.entrySet().stream()
-						.map(entry -> entry.getKey() + "=" + entry.getValue())
-						.collect(Collectors.joining("&")) : null,
-				PARAM);
+		return RequestBody.create(ObjectUtil.mapToParamString(data), PARAM);
 	}
 }

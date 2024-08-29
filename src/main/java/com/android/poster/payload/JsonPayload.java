@@ -18,7 +18,6 @@ public class JsonPayload<T extends Object> extends AbstractPayload<T>
 	public RequestBody getContent()
 	{
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-		final String s = ObjectUtil.printObject(data);
-		return RequestBody.create(s, JSON);
+		return RequestBody.create(ObjectUtil.printObject(data), JSON);
 	}
 }
